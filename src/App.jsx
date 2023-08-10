@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component} from "react";
 import TodoMain from "./components/TodoMain";
 import { Route, Routes } from "react-router-dom";
 import TodoComplete from "./components/TodoComplete";
@@ -33,7 +33,7 @@ export default class App extends Component {
             subtitle: this.state.inputSubtitle,
             date: new Date().toLocaleString(),
             isCompleted: false,
-            isArchived: false,
+            isArchived: false
           },
           ...this.state.todos,
         ],
@@ -60,57 +60,58 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    localStorage.setItem("todoItem", JSON.stringify([...this.state.todos]));
-    if (this.state.theme === themes.light) {
-      document.body.classList.add("light");
-    } else {
-      document.body.classList.remove("light");
-    }
+      localStorage.setItem("todoItem", JSON.stringify([...this.state.todos]))
+      if(this.state.theme === themes.light){
+        document.body.classList.add('light')
+      }else{
+        document.body.classList.remove('light')
+      }
   }
 
   toggleComplete(id) {
-    this.setState((prev) => ({
-      todos: prev.todos.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            isCompleted: !item.isCompleted,
-          };
-        } else {
-          return item;
+    this.setState(prev=> ({todos: prev.todos.map(item =>{
+      if(item.id === id){
+        return {
+          ...item,
+          isCompleted: !item.isCompleted
         }
-      }),
-    }));
+      }else {
+        return item
+      }
+    }) 
+    }))
+    
   }
 
-  addToArchive(id) {
-    this.setState((prev) => ({
-      todos: prev.todos.map((item) => {
-        if (item.id === id && item.isCompleted === false) {
-          return {
-            ...item,
-            isArchived: !item.isArchived,
-          };
-        } else {
-          return item;
+  addToArchive(id){
+    this.setState(prev=> ({todos: prev.todos.map(item =>{
+      if(item.id === id && item.isCompleted === false){
+        return {
+          ...item,
+          isArchived: !item.isArchived
         }
-      }),
-    }));
+      }else{
+        return item
+      }
+    })
+    }))
   }
-  changeTheme() {
-    this.setState((state) => ({
-      theme: state.theme === themes.dark ? themes.light : themes.dark,
+  changeTheme(){
+    this.setState(state => ({
+      theme:
+        state.theme === themes.dark
+          ? themes.light
+          : themes.dark,
     }));
-  }
+  };
+  
 
   render() {
     return (
       <div>
         <div className="createBlock">
           <h2>Панель создания задачи</h2>
-          <span className="changeTheme" onClick={() => this.changeTheme()}>
-            Сменить тему
-          </span>
+          <span className="changeTheme" onClick={()=>this.changeTheme()}>Сменить тему</span>
           <div>
             <input
               type="text"
@@ -127,51 +128,31 @@ export default class App extends Component {
             <button onClick={() => this.createTodoItem()}>Create</button>
           </div>
         </div>
-
+        
         <Routes>
-          <Route
-            path={"/"}
-            element={
-              <TodoMain
-                todos={this.state.todos}
-                completeTodo={(id) => this.toggleComplete(id)}
-                toggleArchive={(id) => this.addToArchive(id)}
-                deleteTodo={(id) => this.todoDelete(id)}
-              />
-            }
-          />
-          <Route
-            path={"/completed"}
-            element={
-              <TodoComplete
-                todos={this.state.todos}
-                completeTodo={(id) => this.toggleComplete(id)}
-                deleteTodo={(id) => this.todoDelete(id)}
-              />
-            }
-          />
-          <Route
-            path={"/archive"}
-            element={
-              <TodoArchive
-                todos={this.state.todos}
-                completeTodo={(id) => this.toggleComplete(id)}
-                toggleArchive={(id) => this.addToArchive(id)}
-                deleteTodo={(id) => this.todoDelete(id)}
-              />
-            }
-          />
-          <Route
-            path={"/all"}
-            element={
-              <AllTodos
-                todos={this.state.todos}
-                completeTodo={(id) => this.toggleComplete(id)}
-                toggleArchive={(id) => this.addToArchive(id)}
-                deleteTodo={(id) => this.todoDelete(id)}
-              />
-            }
-          />
+          <Route path={'/'} element={<TodoMain
+          todos={this.state.todos}
+          completeTodo={(id)=>this.toggleComplete(id)}
+          toggleArchive={(id)=>this.addToArchive(id)}
+          deleteTodo={(id)=>this.todoDelete(id)}
+        />}/>
+        <Route path={'/completed'} element={<TodoComplete
+          todos={this.state.todos}
+          completeTodo={(id)=>this.toggleComplete(id)}
+          deleteTodo={(id)=>this.todoDelete(id)}
+        />}/>
+        <Route path={'/archive'} element={<TodoArchive
+          todos={this.state.todos}
+          completeTodo={(id)=>this.toggleComplete(id)}
+          toggleArchive={(id)=>this.addToArchive(id)}
+          deleteTodo={(id)=>this.todoDelete(id)}
+        />}/>
+        <Route path={'/all'} element={<AllTodos
+          todos={this.state.todos}
+          completeTodo={(id)=>this.toggleComplete(id)}
+          toggleArchive={(id)=>this.addToArchive(id)}
+          deleteTodo={(id)=>this.todoDelete(id)}
+        />}/>
         </Routes>
       </div>
     );
